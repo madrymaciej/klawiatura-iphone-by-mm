@@ -1,0 +1,81 @@
+name: KlawiaturaMM
+options:
+  bundleIdPrefix: pl.mm
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    CODE_SIGN_STYLE: Automatic
+    # Wpisz tu swój Team ID (Apple Developer) albo wybierz zespół w Xcode.
+    DEVELOPMENT_TEAM: ""
+targets:
+  KlawiaturaMM:
+    type: application
+    platform: iOS
+    sources:
+      - App
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: pl.mm.klawiatura
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Klawiatura MM
+        UILaunchScreen: {}
+        NSMicrophoneUsageDescription: Mikrofon służy do dyktowania tekstu po polsku.
+        NSSpeechRecognitionUsageDescription: Rozpoznawanie mowy zamienia dyktowany tekst na pismo.
+        CFBundleURLTypes:
+          - CFBundleURLName: pl.mm.klawiatura
+            CFBundleURLSchemes: [klawiaturamm]
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    entitlements:
+      path: App/KlawiaturaMM.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.pl.mm.klawiatura
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.pl.mm.klawiatura
+        com.apple.developer.icloud-services:
+          - CloudKit
+    dependencies:
+      - target: KlawiaturaMMKeyboard
+  KlawiaturaMMKeyboard:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Keyboard
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: pl.mm.klawiatura.keyboard
+    info:
+      path: Keyboard/Info.plist
+      properties:
+        CFBundleDisplayName: Klawiatura MM
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.keyboard-service
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).KeyboardViewController
+          NSExtensionAttributes:
+            IsASCIICapable: false
+            PrefersRightToLeft: false
+            PrimaryLanguage: pl
+            RequestsOpenAccess: true
+    entitlements:
+      path: Keyboard/KlawiaturaMMKeyboard.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.pl.mm.klawiatura
